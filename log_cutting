@@ -1,0 +1,18 @@
+4.log_cutting：
+日志切割，有这样一个access.log每天会打出大量的日志。实现一个日志切割的功能，并说明该实现方式会有什么缺陷
+
+
+#!/bin/bash
+
+logs_path="/usr/local/nginx/logs"
+save_path="/usr/local/nginx/logs/save_path_log"
+
+#判断分割后的日志保存目录是否存在，如果不存在就创建目录
+if [ ! -d ${save_path_log} ]
+then
+ mkdir -p ${save_path_log}
+fi
+
+#把日志移动到保存目录中，实现日志分割，并重命名为：日志名+日期时间（精确到时）
+mv ${logs_path}/access.log ${save_path}/access$(date+%Y%m%d%H).log
+kill -USR1 `cat /usr/local/nginx/logs/nginx.pid`
